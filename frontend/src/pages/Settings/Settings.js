@@ -4,10 +4,10 @@ import { motion } from 'framer-motion';
 import API from '../../api';
 import './Settings.css';
 
-export default function Settings({ user, onUpdateUser }) {
+export default function Settings({ user, onUpdateUser, darkMode, setDarkMode }) {
   const [formData, setFormData] = useState({
-    name: user.name,
-    email: user.email || '',
+    name: '',
+    email: '',
     notifications: true,
     theme: 'light'
   });
@@ -16,12 +16,14 @@ export default function Settings({ user, onUpdateUser }) {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    setFormData({
-      name: user.name,
-      email: user.email || '',
-      notifications: user.notifications !== false,
-      theme: user.theme || 'light'
-    });
+    if (user) {
+      setFormData({
+        name: user.name || '',
+        email: user.email || '',
+        notifications: user.notifications !== false,
+        theme: user.theme || 'light'
+      });
+    }
   }, [user]);
 
   const handleChange = (e) => {
@@ -30,8 +32,6 @@ export default function Settings({ user, onUpdateUser }) {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
-    setError('');
-    setSuccessMessage('');
   };
 
   const handleSubmit = async (e) => {
@@ -47,11 +47,25 @@ export default function Settings({ user, onUpdateUser }) {
         notifications: formData.notifications,
         theme: formData.theme
       });
+      
+      // Update parent component with the full user object
       onUpdateUser(response.data.user);
+      
+      // Handle theme change if needed
+      if (formData.theme === 'dark') {
+        setDarkMode(true);
+      } else if (formData.theme === 'light') {
+        setDarkMode(false);
+      }
+      
       setSuccessMessage('Settings saved successfully!');
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to save settings. Please try again.');
+      const errorMsg = err.response?.data?.message || 
+                      err.response?.data?.error || 
+                      'Failed to save settings. Please try again.';
+      setError(errorMsg);
+      console.error('Settings update error:', err.response?.data);
     } finally {
       setIsLoading(false);
     }
@@ -94,6 +108,7 @@ export default function Settings({ user, onUpdateUser }) {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Enter your name"
+                required
               />
             </div>
           </div>
@@ -112,6 +127,7 @@ export default function Settings({ user, onUpdateUser }) {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Enter your email"
+                required
               />
             </div>
           </div>

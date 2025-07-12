@@ -75,7 +75,7 @@ const DashboardHeader = ({
             {activeView === 'reports' && 'Reports'}
             {activeView === 'calendar' && 'Calendar'}
             {activeView === 'settings' && 'Settings'}
-            {activeView === 'dashboard' && user.name}
+       
           </motion.h1>
         </div>
 
@@ -121,7 +121,7 @@ const DashboardHeader = ({
           
           <div className="user-profile">
             <FaUserCircle className="user-icon" />
-            <span>{user.name}</span>
+          
           </div>
           
           <motion.button 
@@ -456,7 +456,7 @@ export default function Dashboard() {
   const [sortConfig, setSortConfig] = useState({ key: 'createdAt', direction: 'desc' });
   const [editingTask, setEditingTask] = useState(null);
   const [editText, setEditText] = useState('');
-  const [user, setUser] = useState({ name: 'User' });
+  const [user, setUser] = useState({ name: 'User', email: '' });
   const [notifications, setNotifications] = useState(3);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
@@ -469,6 +469,10 @@ export default function Dashboard() {
         setUser(res.data);
       } catch (err) {
         console.error('Failed to fetch user:', err);
+        // Handle unauthorized or other errors
+        if (err.response?.status === 401) {
+          handleLogout();
+        }
       }
     };
     fetchUser();
@@ -505,6 +509,9 @@ export default function Dashboard() {
       setTasks(sortedTasks);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to fetch tasks');
+      if (err.response?.status === 401) {
+        handleLogout();
+      }
     } finally {
       setIsLoading(false);
     }
@@ -526,6 +533,7 @@ export default function Dashboard() {
       });
       setTasks([res.data.data, ...tasks]);
       setTitle('');
+      setError('');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to add task');
     } finally {
@@ -539,6 +547,7 @@ export default function Dashboard() {
     try {
       await API.delete(`/tasks/${id}`);
       setTasks(tasks.filter(task => task._id !== id));
+      setError('');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to delete task');
     }
@@ -553,18 +562,26 @@ export default function Dashboard() {
       setTasks(tasks.map(task => 
         task._id === id ? res.data.data : task
       ));
+      setError('');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to update task');
     }
   };
 
   const handleEditTask = async (id) => {
+    if (!editText.trim()) {
+      setError('Task title cannot be empty');
+      return;
+    }
+
     try {
       const res = await API.put(`/tasks/${id}`, { title: editText });
       setTasks(tasks.map(task => 
         task._id === id ? res.data.data : task
       ));
       setEditingTask(null);
+      setEditText('');
+      setError('');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to edit task');
     }
@@ -592,7 +609,10 @@ export default function Dashboard() {
   };
 
   const handleUserUpdate = (updatedUser) => {
-    setUser(updatedUser);
+    setUser(prev => ({
+      ...prev,
+      ...updatedUser
+    }));
   };
 
   const renderActiveView = () => {
@@ -604,7 +624,7 @@ export default function Dashboard() {
       case 'calendar':
         return <Calendar tasks={tasks} />;
       case 'settings':
-        return <Settings user={user} onUpdateUser={handleUserUpdate} />;
+        return <Settings user={user} onUpdateUser={handleUserUpdate} darkMode={darkMode} setDarkMode={setDarkMode} />;
       default:
         return (
           <DashboardView 
