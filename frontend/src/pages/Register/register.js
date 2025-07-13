@@ -1,4 +1,3 @@
-// Register.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUser, FaEnvelope, FaLock, FaCheck, FaArrowRight, FaEye, FaEyeSlash } from 'react-icons/fa';
@@ -9,7 +8,7 @@ import appleLogo from '../../assets/apple.png';
 
 export default function Register() {
   const [form, setForm] = useState({ 
-    fullName: '', 
+    username: '', 
     email: '', 
     password: '',
     agreeTerms: false
@@ -32,7 +31,7 @@ export default function Register() {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!form.fullName.trim()) newErrors.fullName = 'Full name is required';
+    if (!form.username.trim()) newErrors.username = 'Full name is required';
     if (!form.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
@@ -52,13 +51,28 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-    
+
     setIsSubmitting(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      navigate('/dashboard');
+      const res = await fetch('http://localhost:5000/api/users/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: form.username,
+          email: form.email,
+          password: form.password
+        })
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem('token', data.token);
+        navigate('/dashboard');
+      } else {
+        setErrors({ server: data.msg || 'Registration failed' });
+      }
     } catch (err) {
-      setErrors({ server: 'Registration failed. Please try again.' });
+      setErrors({ server: 'Server error. Please try again.' });
     } finally {
       setIsSubmitting(false);
     }
@@ -66,34 +80,13 @@ export default function Register() {
 
   return (
     <div className="register-container">
-      {/* Fullscreen video background */}
-      <video
-        className="bg-video"
-        autoPlay
-        muted
-        loop
-        playsInline
-        src="/splash.mp4"
-        type="video/mp4"
-      >
-        Your browser does not support the video tag.
-      </video>
-
-      {/* Left side overlay with features */}
+      <video className="bg-video" autoPlay muted loop playsInline src="/splash.mp4" />
       <div className="video-overlay">
         <div className="overlay-content">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
+          <motion.h2 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
             Join TaskFlow Today
           </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-          >
+          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
             Register now to unlock powerful task management features
           </motion.p>
           <div className="features">
@@ -103,13 +96,7 @@ export default function Register() {
               "Smart productivity analytics",
               "Cross-platform sync"
             ].map((feature, index) => (
-              <motion.div 
-                className="feature-item"
-                key={feature}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6 + index * 0.1 }}
-              >
+              <motion.div className="feature-item" key={feature} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 + index * 0.1 }}>
                 <div className="feature-icon-container">
                   <FaArrowRight className="feature-icon" />
                 </div>
@@ -120,33 +107,17 @@ export default function Register() {
         </div>
       </div>
 
-      {/* Right side form */}
       <div className="form-section">
-        <motion.div 
-          className="register-card"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-        >
+        <motion.div className="register-card" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }}>
           <div className="register-header">
-            <motion.h1 
-              className="logo"
-              whileHover={{ scale: 1.05 }}
-            >
-              TaskFlow
-            </motion.h1>
+            <motion.h1 className="logo" whileHover={{ scale: 1.05 }}>TaskFlow</motion.h1>
             <h2>Create Account</h2>
             <p>Get started with your free account</p>
           </div>
 
           <AnimatePresence>
             {errors.server && (
-              <motion.div 
-                className="error-message"
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-              >
+              <motion.div className="error-message" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
                 {errors.server}
               </motion.div>
             )}
@@ -157,13 +128,13 @@ export default function Register() {
               <FaUser className="input-icon" />
               <input
                 type="text"
-                name="fullName"
+                name="username"
                 placeholder="Full Name"
-                value={form.fullName}
+                value={form.username}
                 onChange={handleChange}
-                className={errors.fullName ? 'error' : ''}
+                className={errors.username ? 'error' : ''}
               />
-              {errors.fullName && <span className="input-error">{errors.fullName}</span>}
+              {errors.username && <span className="input-error">{errors.username}</span>}
             </div>
 
             <div className="input-group">
@@ -189,11 +160,7 @@ export default function Register() {
                 onChange={handleChange}
                 className={errors.password ? 'error' : ''}
               />
-              <button 
-                type="button" 
-                className="password-toggle"
-                onClick={() => setShowPassword(!showPassword)}
-              >
+              <button type="button" className="password-toggle" onClick={() => setShowPassword(!showPassword)}>
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
               {errors.password && <span className="input-error">{errors.password}</span>}
@@ -233,24 +200,14 @@ export default function Register() {
             </motion.button>
           </form>
 
-          <div className="divider">
-            <span>Or sign up with</span>
-          </div>
+          <div className="divider"><span>Or sign up with</span></div>
 
           <div className="social-login">
-            <motion.button 
-              className="social-btn google"
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.98 }}
-            >
+            <motion.button className="social-btn google" whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
               <img src={googleLogo} alt="Google" />
               Google
             </motion.button>
-            <motion.button 
-              className="social-btn apple"
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.98 }}
-            >
+            <motion.button className="social-btn apple" whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
               <img src={appleLogo} alt="Apple" />
               Apple
             </motion.button>
