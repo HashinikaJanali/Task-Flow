@@ -1,6 +1,6 @@
 # 🚀 Task-Flow – A Full Stack Task Management Web App
 
-A sleek and modern task management application built with the **MERN** stack. It allows users to register, log in, and manage daily tasks with features like task filtering, animated UI, and responsive design. Built for the Full Stack Developer assignment at **digitalmarketing.lk**.
+A sleek and modern task management application built with the **MERN** stack. It allows users to register, log in, and manage daily tasks with features like task filtering, animated UI, and responsive design.
 
 ---
 
@@ -134,7 +134,7 @@ This project was developed for the **Full Stack Developer** technical assignment
 
 ## 👩‍💻 Author
 
-**Hashinika Janali**  
+**Archana Janali Hashinka**  
 📧 (hashinikaarchana@gmail.com)  
 🔗 [LinkedIn](#) *(Hashinika Janali)*
 
