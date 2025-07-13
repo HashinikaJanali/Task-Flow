@@ -1,0 +1,145 @@
+# 🚀 Task-Flow – A Full Stack Task Management Web App
+
+A sleek and modern task management application built with the **MERN** stack. It allows users to register, log in, and manage daily tasks with features like task filtering, animated UI, and responsive design. Built for the Full Stack Developer assignment at **digitalmarketing.lk**.
+
+---
+
+## 🌍 Live Demo
+
+🔗 **Frontend**: [https://task-flow-9po1.vercel.app](https://task-flow-9po1.vercel.app)
+
+⚠️ **Note**: Backend is not deployed online due to hosting limitations, but can be run locally (see below).
+
+---
+
+## 📹 Demo Video
+
+🎬 [Watch on YouTube (Unlisted)](https://youtu.be/dgoJqRYB1rk)]
+
+---
+## ✨ Features
+
+- 🔐 User Registration & Login with JWT
+- 📝 Add, Edit, Delete, Complete Tasks
+- 🗂️ Task Filtering (All / Active / Completed)
+- 🧼 Input validation & error handling
+- 📱 Fully responsive (mobile-first design)
+- 🧠 Clean UI with React Icons and smooth UX
+- 🔐 Protected routes using tokens
+
+---
+
+## 🛠 Tech Stack
+
+### 🔹 Frontend:
+- React.js
+- Axios
+- React Icons
+- CSS + Animations
+
+### 🔸 Backend:
+- Node.js + Express.js
+- MongoDB + Mongoose
+- JWT Authentication
+- Bcrypt Password Hashing
+
+---
+
+## ⚙️ Setup Instructions
+
+### 🔧 Prerequisites
+
+- Node.js v18+
+- MongoDB (local or MongoDB Atlas)
+- Git
+- visual studio codes 
+
+---
+
+### 📁 Clone the Repo
+
+```bash
+git clone https://github.com/HashinikaJanali/Task-Flow.git
+cd Task-Flow
+```
+
+---
+
+### 📦 Backend Setup
+
+```bash
+cd backend
+npm install
+```
+
+Create a `.env` file in the `backend` folder:
+
+```env
+PORT=5000
+MONGO_URI=mongodb+srv://taskadmin:task1234@cluster0.wr28xcv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+JWT_SECRET=mysecretjwtkey
+
+```
+
+Start the server:
+
+```bash
+npm start
+```
+
+Your backend will run on: `http://localhost:5000`
+
+---
+
+### 💻 Frontend Setup
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+Frontend will run on: `http://localhost:3000`
+
+---
+
+## 💡 Bonus Highlights
+
+- 🎬 Splash screen animation with video background
+- 📦 Axios interceptors to inject JWT token
+- 🔁 Auto-refresh task list after every change
+- 🧩 Modular file structure
+- 📱 Mobile, tablet & desktop optimized
+
+---
+
+## 🧪 Test Credentials (optional)
+
+```txt
+Email: test@1234
+Password: test1234
+```
+
+---
+
+## 🧠 Assignment Notes
+
+This project was developed for the **Full Stack Developer** technical assignment at **digitalmarketing.lk**, focusing on:
+
+- ✅ Ability to follow instructions
+- ✅ Full stack development proficiency
+- ✅ Clean UI/UX & code organization
+
+---
+
+## 👩‍💻 Author
+
+**Hashinika Janali**  
+📧 (hashinikaarchana@gmail.com)  
+🔗 [LinkedIn](#) *(Hashinika Janali)*
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
