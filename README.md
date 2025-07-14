@@ -113,6 +113,47 @@ Frontend will run on: `http://localhost:3000`
 
 ---
 
+###🧪 Testing
+
+The backend includes automated testing using Jest and Supertest.
+
+🔹 What is Tested
+
+✅ API Health check (/api/ping)
+
+✅ You can extend tests to cover:
+
+   1.User registration
+
+   2.Login
+
+   3.Task creation and updates
+
+🧪 Run Tests
+
+01.Go to the backend/ folder:
+  cd backend
+02.Run the test suite:
+  npm test
+  
+You’ll see test results for API endpoints.
+
+📂 Test File Example
+tests/ping.test.js
+
+const request = require('supertest');
+const app = require('../app');
+
+describe('GET /api/ping', () => {
+  it('should return 200 and test message', async () => {
+    const res = await request(app).get('/api/ping');
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toBe('Server is working!');
+  });
+});
+
+📌 More endpoint tests like POST /register, POST /login, etc., can be added for full coverage.
+
 ## 🧪 Test Credentials (optional)
 
 ```txt
