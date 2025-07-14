@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  Backend:
+    build: ./Backend
+    ports:
+      - '5000:5000'
+    volumes:
+      - ./Backend:/app
+    environment:
+      - MONGO_URI=mongodb+srv://taskadmin:task1234@cluster0.wr28xcv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      - JWT_SECRET=mysecretjwtkey
+
+    depends_on:
+      - mongo
+
+  frontend:
+    build: ./frontend
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - Backend
+
+  mongo:
+    image: mongo
+    ports:
+      - '27017:27017'
