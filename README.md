@@ -176,7 +176,7 @@ This project was developed for the **Full Stack Developer** technical assignment
 ## 👩‍💻 Author
 
 **Archana Janali Hashinka**  
-📧 (hashinikaarchana@gmail.com)  
+📧 (hashinikaajanali@gmail.com)  
 🔗 [LinkedIn](#) *(Hashinika Janali)*
 
 ---
