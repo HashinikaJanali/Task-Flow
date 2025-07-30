@@ -165,9 +165,6 @@ Password: test1234
 
 ## 🧠 Assignment Notes
 
-This project was developed for the **Full Stack Developer** technical assignment at **digitalmarketing.lk**, focusing on:
-
-- ✅ Ability to follow instructions
 - ✅ Full stack development proficiency
 - ✅ Clean UI/UX & code organization
 
