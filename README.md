@@ -8,8 +8,6 @@ A sleek and modern task management application built with the **MERN** stack. It
 
 🔗 **Frontend**: [https://task-flow-9po1.vercel.app](https://task-flow-9po1.vercel.app)
 
-⚠️ **Note**: Backend is not deployed online due to hosting limitations, but can be run locally (see below).
-
 ---
 
 ## 📹 Demo Video
